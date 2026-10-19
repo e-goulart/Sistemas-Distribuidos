@@ -114,6 +114,7 @@ public final class AccountService {
             return response(401, "Senha atual incorreta", null);
         }
         if (!validPassword(newPassword)) return response(400, "Senha fora do padrão", null);
+        if (Passwords.matches(newPassword, user.secret)) return response(400, "A senha nova é igual à senha antiga", null);
         users.updateSecret(user, Passwords.encode(newPassword));
         return response(200, "Senha atualizada com sucesso", null);
     }

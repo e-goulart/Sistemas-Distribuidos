@@ -33,7 +33,7 @@ public final class ClientWindow extends JFrame {
     private static final Color BLUE = new Color(32, 86, 170);
     private static final Color SOFT = new Color(246, 248, 253);
     private final JTextField host = new JTextField("127.0.0.1", 15);
-    private final JTextField port = new JTextField("34345", 7);
+    private final JTextField port = new JTextField("22072", 7);
     private final JLabel sessionLabel = new JLabel("● Não autenticado");
     private final JLabel statusLabel = new JLabel("Aguardando operação");
     private final JTextArea traffic = new JTextArea();

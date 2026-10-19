@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
 
 public final class ServerWindow extends JFrame {
     private final Color blue = new Color(32, 86, 170);
-    private final JTextField port = new JTextField("34345", 9);
+    private final JTextField port = new JTextField("22072", 9);
     private final JLabel state = new JLabel("● Desligado");
     private final JButton toggle = new JButton("Iniciar servidor");
     private final JTextArea logs = new JTextArea();

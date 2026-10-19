@@ -54,6 +54,7 @@ public final class ProtocolTests {
             check("atualizar nome correto", call("updateusername", Json.object("token", token, "username", "tester", "name", "Nome Corrigido")), 200);
             check("alterar senha errada", call("updateuserpassword", Json.object("token", token, "username", "tester", "oldPassword", "errada", "newPassword", NEW_PASSWORD)), 401);
             check("alterar senha fraca", call("updateuserpassword", Json.object("token", token, "username", "tester", "oldPassword", PASSWORD, "newPassword", "12345678")), 400);
+            check("impedir senha nova igual à antiga", call("updateuserpassword", Json.object("token", token, "username", "tester", "oldPassword", PASSWORD, "newPassword", PASSWORD)), 400);
             check("alterar senha correto", call("updateuserpassword", Json.object("token", token, "username", "tester", "oldPassword", PASSWORD, "newPassword", NEW_PASSWORD)), 200);
             check("senha antiga recusada", call("login", Json.object("username", "tester", "password", PASSWORD)), 401);
             check("senha nova aceita", call("login", Json.object("username", "tester", "password", NEW_PASSWORD)), 200);
@@ -77,6 +78,7 @@ public final class ProtocolTests {
             check("persiste após reiniciar", call("login", Json.object("username", "persistido", "password", PASSWORD)), 200);
         } finally { restarted.close(); }
         require("arquivo salvo em disco", Files.exists(storage));
+        require("JSON formatado com indentação", Files.readString(storage).contains("\n  {\n    \"name\""));
         String saved = Files.readString(storage);
         require("senha não aparece em texto puro no disco", !saved.contains(PASSWORD));
         System.out.println("\nOK — " + passed + " verificações concluídas. Testes reais por TCP.");

@@ -45,6 +45,49 @@ public final class Json {
         return result.toString();
     }
 
+    /** JSON formatado com recuo de dois espaços, para arquivos legíveis. */
+    public static String stringifyPretty(Object item) {
+        StringBuilder result = new StringBuilder();
+        writePretty(result, item, 0);
+        return result.toString();
+    }
+
+    private static void indent(StringBuilder out, int level) {
+        for (int i = 0; i < level * 2; i++) out.append(' ');
+    }
+
+    private static void writePretty(StringBuilder out, Object item, int level) {
+        if (item instanceof Map<?, ?>) {
+            Map<?, ?> map = (Map<?, ?>) item;
+            if (map.isEmpty()) { out.append("{}"); return; }
+            out.append("{\n");
+            int index = 0;
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                if (!(entry.getKey() instanceof String)) throw new IllegalArgumentException("Chave não textual");
+                indent(out, level + 1);
+                write(out, entry.getKey());
+                out.append(": ");
+                writePretty(out, entry.getValue(), level + 1);
+                if (++index < map.size()) out.append(',');
+                out.append('\n');
+            }
+            indent(out, level);
+            out.append('}');
+        } else if (item instanceof List<?>) {
+            List<?> list = (List<?>) item;
+            if (list.isEmpty()) { out.append("[]"); return; }
+            out.append("[\n");
+            for (int i = 0; i < list.size(); i++) {
+                indent(out, level + 1);
+                writePretty(out, list.get(i), level + 1);
+                if (i + 1 < list.size()) out.append(',');
+                out.append('\n');
+            }
+            indent(out, level);
+            out.append(']');
+        } else write(out, item);
+    }
+
     private static void write(StringBuilder out, Object item) {
         if (item == null) out.append("null");
         else if (item instanceof String) {

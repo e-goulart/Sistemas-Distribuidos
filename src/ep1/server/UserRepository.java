@@ -76,7 +76,7 @@ final class UserRepository {
         }
         Path temp = Files.createTempFile(file.toAbsolutePath().getParent(), "users-", ".tmp");
         try {
-            Files.writeString(temp, Json.stringify(records), StandardCharsets.UTF_8);
+            Files.writeString(temp, Json.stringifyPretty(records) + System.lineSeparator(), StandardCharsets.UTF_8);
             try { Files.move(temp, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE); }
             catch (AtomicMoveNotSupportedException ex) { Files.move(temp, file, StandardCopyOption.REPLACE_EXISTING); }
         } finally { Files.deleteIfExists(temp); }
